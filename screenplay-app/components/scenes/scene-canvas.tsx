@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react'
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 import { SceneBlock } from './scene-block'
 import { SceneConnection } from './scene-connection'
 import { Button } from "@/components/ui/button"
 import { Plus } from 'lucide-react'
 import { SceneEditor } from './scene-editor'
-import { Scene, Character, Location } from '@/lib/types'
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
+import { Scene } from '@/lib/types'
 
 interface SceneCanvasProps {
   projectId: string | null
@@ -16,17 +16,58 @@ interface SceneCanvasProps {
 export function SceneCanvas({ projectId }: SceneCanvasProps) {
   const [scenes, setScenes] = useState<Scene[]>([])
   const [editingScene, setEditingScene] = useState<Scene | null>(null)
-  const [connectingScene, setConnectingScene] = useState<string | null>(null)
 
   useEffect(() => {
     // Load scenes for the current project
     // This is where you'd typically fetch data from an API
-    // For now, we'll just set some dummy data
-    setScenes([
-      { id: '1', title: 'Opening Scene', content: 'Fade in...', position: { x: 100, y: 100 }, connections: [], order: 1, color: '#FFB3BA' },
-      { id: '2', title: 'Climax', content: 'The hero faces the villain...', position: { x: 400, y: 300 }, connections: [], order: 2, color: '#BAFFC9' },
-    ])
+    if (projectId) {
+      // Simulating API call
+      const mockScenes: Scene[] = [
+        { 
+          id: '1', 
+          title: 'Opening Scene', 
+          content: 'Fade in...', 
+          position: { x: 100, y: 100 }, 
+          connections: [], 
+          order: 1, 
+          color: '#FFB3BA',
+          type: 'scene',
+          characters: [],
+          storyPhase: 'Act 1: Setup'
+        },
+        { 
+          id: '2', 
+          title: 'Climax', 
+          content: 'The hero faces the villain...', 
+          position: { x: 400, y: 300 }, 
+          connections: [], 
+          order: 2, 
+          color: '#BAFFC9',
+          type: 'scene',
+          characters: [],
+          storyPhase: 'Act 2: Confrontation'
+        },
+      ]
+      setScenes(mockScenes)
+    }
   }, [projectId])
+
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) return
+
+    const newScenes = Array.from(scenes)
+    const [reorderedScene] = newScenes.splice(result.source.index, 1)
+    newScenes.splice(result.destination.index, 0, reorderedScene)
+
+    // Update scene orders
+    const updatedScenes = newScenes.map((scene, index) => ({
+      ...scene,
+      order: index + 1
+    }))
+
+    setScenes(updatedScenes)
+    // Here you would also update the scene order in your backend
+  }
 
   const handleAddScene = () => {
     const newScene: Scene = {
@@ -36,7 +77,10 @@ export function SceneCanvas({ projectId }: SceneCanvasProps) {
       position: { x: Math.random() * 500, y: Math.random() * 500 },
       connections: [],
       order: scenes.length + 1,
-      color: `#${Math.floor(Math.random()*16777215).toString(16)}` // Random color
+      color: `#${Math.floor(Math.random()*16777215).toString(16)}`, // Random color
+      type: 'scene',
+      characters: [],
+      storyPhase: 'Unassigned'
     }
     setScenes([...scenes, newScene])
   }
@@ -72,40 +116,11 @@ export function SceneCanvas({ projectId }: SceneCanvasProps) {
   }
   
   const handleConnectScene = (id: string) => {
-    if (connectingScene === null) {
-      setConnectingScene(id)
-    } else if (connectingScene !== id) {
-      setScenes(scenes.map(scene => {
-        if (scene.id === connectingScene) {
-          return { ...scene, connections: [...scene.connections, id] }
-        } else if (scene.id === id) {
-          return { ...scene, connections: [...scene.connections, connectingScene] }
-        }
-        return scene
-      }))
-      setConnectingScene(null)
-    }
-  }
-
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) {
-      return
-    }
-
-    const items = Array.from(scenes)
-    const [reorderedItem] = items.splice(result.source.index, 1)
-    items.splice(result.destination.index, 0, reorderedItem)
-
-    const updatedScenes = items.map((item, index) => ({
-      ...item,
-      order: index + 1
-    }))
-
-    setScenes(updatedScenes)
+    // Implement connection logic here
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="scenes">
         {(provided) => (
           <div 
@@ -155,8 +170,6 @@ export function SceneCanvas({ projectId }: SceneCanvasProps) {
           scene={editingScene}
           onSave={handleSaveScene}
           onClose={() => setEditingScene(null)}
-          characters={[]}
-          locations={[]}
         />
       )}
     </DragDropContext>

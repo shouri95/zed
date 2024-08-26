@@ -9,16 +9,16 @@ export function cn(...inputs: ClassValue[]) {
 export function formatScreenplayContent(content: string): string {
   const lines = content.split('\n')
   return lines.map(line => {
-    if (line.startsWith('INT.') || line.startsWith('EXT.')) {
-      return line.toUpperCase()
-    } else if (line.trim().length > 0 && line === line.toUpperCase()) {
-      return `    ${line}` // Character names
-    } else if (line.startsWith('(')) {
-      return `  ${line}` // Parentheticals
-    } else if (line.includes('FADE IN:') || line.includes('FADE OUT.') || line.includes('CUT TO:')) {
-      return `\n${line.toUpperCase()}\n` // Transitions
+    if (line.trim().startsWith('INT.') || line.trim().startsWith('EXT.')) {
+      return line.trim().toUpperCase()
+    } else if (line.trim() === line.trim().toUpperCase() && line.trim().length > 0) {
+      return `\n${line.trim()}\n` // Character names
+    } else if (line.trim().startsWith('(') && line.trim().endsWith(')')) {
+      return `  ${line.trim()}` // Parentheticals
+    } else if (['FADE IN:', 'FADE OUT.', 'CUT TO:'].includes(line.trim().toUpperCase())) {
+      return `\n${line.trim().toUpperCase()}\n` // Transitions
     } else {
-      return `        ${line}` // Action and dialogue
+      return `    ${line.trim()}` // Action and dialogue
     }
   }).join('\n')
 }

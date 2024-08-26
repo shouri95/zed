@@ -1,6 +1,7 @@
 import { type } from "os"
 
 export interface Scene {
+  storyPhase: string
   type: string
   id: string
   title: string
@@ -13,6 +14,7 @@ export interface Scene {
   order: number
   color: string
   tags?: string[]
+  characters: string[]
 }
 
 export interface Character {
