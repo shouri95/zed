@@ -1,163 +1,197 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import React from 'react'
+import { TopNavBar } from '@/components/TopNavBar'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { PlusCircle, Film, Users, Book, Calendar, Activity } from 'lucide-react'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-
-// Mock data for projects
-const projects = [
-  { id: 1, title: "The Silent Echo", genre: "Sci-Fi", progress: 65, words: 12000, lastEdited: "2024-03-15" },
-  { id: 2, title: "Whispers in the Wind", genre: "Drama", progress: 30, words: 5000, lastEdited: "2024-03-10" },
-  { id: 3, title: "Neon Nights", genre: "Cyberpunk", progress: 80, words: 18000, lastEdited: "2024-03-18" },
-]
-
-// Mock data for writing progress
-const writingProgressData = [
-  { name: 'Mon', words: 1500 },
-  { name: 'Tue', words: 2000 },
-  { name: 'Wed', words: 1800 },
-  { name: 'Thu', words: 2200 },
-  { name: 'Fri', words: 1900 },
-  { name: 'Sat', words: 1000 },
-  { name: 'Sun', words: 2500 },
-]
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Clock, CheckCircle, Search } from 'lucide-react'
 
 export default function WorkspacePage() {
-  const [activeTab, setActiveTab] = useState("projects")
-  const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <TopNavBar />
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-center mb-8">
+          <div className="w-full max-w-md">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Input 
+                type="text" 
+                placeholder="Search projects, tasks, characters..." 
+                className="pl-10 pr-4 py-2 w-full"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex">
+          <main className="flex-grow mr-8">
+            <h1 className="text-3xl font-bold mb-2">Overview</h1>
+            <p className="text-gray-600 mb-8">View key stats and insights for all your projects.</p>
 
-  useEffect(() => {
-    // Check if the user is logged in
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'
-    if (!isLoggedIn) {
-      router.push('/sign-in')
-    } else {
-      setIsLoading(false)
-    }
-  }, [router])
+            <div className="grid grid-cols-4 gap-6 mb-8">
+              <StatCard title="Total Projects" value="12" />
+              <StatCard title="In Progress" value="8" />
+              <StatCard title="Completed" value="4" />
+              <StatCard title="Total Revenue" value="$45,231" />
+            </div>
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+            <div className="grid grid-cols-2 gap-6 mb-8">
+              <ProjectProgress />
+              <TaskCompletion />
+            </div>
+
+            <ProjectsTable />
+          </main>
+          <aside className="w-80">
+            <TasksList />
+          </aside>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function StatCard({ title, value }: { title: string, value: string }) {
+  return (
+    <Card>
+      <CardContent className="pt-6">
+        <div className="text-3xl font-bold">{value}</div>
+        <p className="text-sm text-gray-600 mt-2">{title}</p>
+      </CardContent>
+    </Card>
+  )
+}
+
+function ProjectProgress() {
+  const projects = [
+    { name: "The Raay Screenplay", progress: 80 },
+    { name: "The Raay Screenplay 2", progress: 30 },
+    { name: "The Raay Screenplay 3", progress: 10 },
+  ]
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <header className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">My Workspace</h1>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" /> New Project
-        </Button>
-      </header>
-
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="projects">Projects</TabsTrigger>
-          <TabsTrigger value="stats">Writing Stats</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="projects" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map(project => (
-              <Card key={project.id} className="overflow-hidden">
-                <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-                  <CardTitle>{project.title}</CardTitle>
-                  <CardDescription className="text-blue-100">{project.genre}</CardDescription>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Progress</span>
-                      <span>{project.progress}%</span>
-                    </div>
-                    <Progress value={project.progress} className="w-full" />
-                    <div className="flex justify-between text-sm">
-                      <span>Words</span>
-                      <span>{project.words}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span>Last Edited</span>
-                      <span>{project.lastEdited}</span>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="bg-gray-50">
-                  <Button variant="outline" className="w-full">Open Project</Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="stats">
-          <Card>
-            <CardHeader>
-              <CardTitle>Writing Progress</CardTitle>
-              <CardDescription>Your daily word count for the past week</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={writingProgressData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="words" fill="#8884d8" />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-
-      <section className="mt-12">
-        <h2 className="text-2xl font-semibold mb-4">Quick Stats</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
-              <Film className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{projects.length}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Words</CardTitle>
-              <Book className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{projects.reduce((sum, project) => sum + project.words, 0)}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Avg. Progress</CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {Math.round(projects.reduce((sum, project) => sum + project.progress, 0) / projects.length)}%
+    <Card>
+      <CardHeader>
+        <CardTitle>Project Progress</CardTitle>
+        <p className="text-sm text-gray-600">Track the progress of your projects.</p>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {projects.map((project, index) => (
+            <div key={index}>
+              <div className="flex justify-between mb-1">
+                <span className="text-sm font-medium">{project.name}</span>
+                <span className="text-sm font-medium">{project.progress}%</span>
               </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Writing Streak</CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">7 days</div>
-            </CardContent>
-          </Card>
+              <Progress value={project.progress} className="h-2" />
+            </div>
+          ))}
         </div>
-      </section>
-    </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+function TaskCompletion() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Task Completion</CardTitle>
+        <p className="text-sm text-gray-600">See how many tasks are completed across your projects.</p>
+      </CardHeader>
+      <CardContent>
+        {/* Add task completion chart or stats here */}
+        <p>Task completion stats coming soon...</p>
+      </CardContent>
+    </Card>
+  )
+}
+
+function ProjectsTable() {
+  const projects = [
+    { title: "The Raay Screenplay", status: "In Progress", dueDate: "June 30, 2024", tasksInProgress: 4, tasksPending: 2 },
+    { title: "The Raay Screenplay 2", status: "Pending", dueDate: "August 15, 2024", tasksInProgress: 0, tasksPending: 1 },
+    { title: "The Raay Screenplay 3", status: "In Progress", dueDate: "November 1, 2024", tasksInProgress: 2, tasksPending: 3 },
+  ]
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Projects</CardTitle>
+        <p className="text-sm text-gray-600">View and manage your screenplay projects.</p>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Title</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Due Date</TableHead>
+              <TableHead>Tasks</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {projects.map((project, index) => (
+              <TableRow key={index}>
+                <TableCell>{project.title}</TableCell>
+                <TableCell>
+                  <Badge variant={project.status === "In Progress" ? "default" : "secondary"}>
+                    {project.status === "In Progress" ? (
+                      <Clock className="w-3 h-3 mr-1 inline" />
+                    ) : (
+                      <CheckCircle className="w-3 h-3 mr-1 inline" />
+                    )}
+                    {project.status}
+                  </Badge>
+                </TableCell>
+                <TableCell>{project.dueDate}</TableCell>
+                <TableCell>
+                  <Badge variant="default" className="mr-1">{project.tasksInProgress} In Progress</Badge>
+                  <Badge variant="secondary">{project.tasksPending} Pending</Badge>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  )
+}
+
+function TasksList() {
+  const tasks = [
+    { name: "Write Act 1", status: "In Progress" },
+    { name: "Research character backstories", status: "Pending" },
+    { name: "Outline Act 2", status: "In Progress" },
+    { name: "Write dialogue for Act 3", status: "Pending" },
+  ]
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Tasks</CardTitle>
+        <p className="text-sm text-gray-600">Manage your tasks and track your progress.</p>
+      </CardHeader>
+      <CardContent>
+        <ul className="space-y-2">
+          {tasks.map((task, index) => (
+            <li key={index} className="flex items-center justify-between">
+              <span>{task.name}</span>
+              <Badge variant={task.status === "In Progress" ? "default" : "secondary"}>
+                {task.status === "In Progress" ? (
+                  <Clock className="w-3 h-3 mr-1 inline" />
+                ) : (
+                  <CheckCircle className="w-3 h-3 mr-1 inline" />
+                )}
+                {task.status}
+              </Badge>
+            </li>
+          ))}
+        </ul>
+      </CardContent>
+    </Card>
   )
 }
