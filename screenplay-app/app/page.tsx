@@ -1,219 +1,105 @@
-'use client';
-
-import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import React from 'react'
+import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { PlusCircle, Film, Users, Book, Activity, Calendar, PenTool } from 'lucide-react'
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useProject } from '@/lib/contexts/ProjectContext'
-import { Project, Scene, Character } from '@/lib/types'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { PenTool, Users, Book, Calendar } from 'lucide-react'
 
-export default function Home() {
-  const [projects, setProjects] = useState<Project[]>([])
-  const [newProject, setNewProject] = useState({ title: '', description: '' })
-  const [recentScenes, setRecentScenes] = useState<Scene[]>([])
-  const [characterCount, setCharacterCount] = useState<number>(0)
-  const [totalWordCount, setTotalWordCount] = useState<number>(0)
-  const [projectProgress, setProjectProgress] = useState<{ name: string; progress: number }[]>([])
-  const { setCurrentProject } = useProject()
-  const router = useRouter()
-
-  useEffect(() => {
-    // Fetch projects, recent scenes, character count, and word count
-    // This is where you'd typically make API calls
-    // For now, we'll use dummy data
-    setProjects([
-      { id: '1', title: 'My First Screenplay', description: 'A thrilling adventure' },
-      { id: '2', title: 'Rom-Com Experiment', description: 'Love and laughter' },
-    ])
-    setRecentScenes([
-      { id: '1', title: 'Opening Scene', content: 'FADE IN...', order: 1, position: { x: 0, y: 0 }, connections: [], color: '#FFB3BA', type: 'scene' },
-      { id: '2', title: 'Meet Cute', content: 'INT. COFFEE SHOP - DAY', order: 2, position: { x: 0, y: 0 }, connections: [], color: '#BAFFC9', type: 'scene' },
-    ])
-    setCharacterCount(5)
-    setTotalWordCount(15000)
-    setProjectProgress([
-      { name: 'My First Screenplay', progress: 65 },
-      { name: 'Rom-Com Experiment', progress: 30 },
-    ])
-  }, [])
-
-  const handleAddProject = () => {
-    const project = {
-      id: `project-${Date.now()}`,
-      title: newProject.title,
-      description: newProject.description
-    }
-    setProjects([...projects, project])
-    setNewProject({ title: '', description: '' })
-  }
-
-  const handleOpenProject = (project: Project) => {
-    setCurrentProject(project)
-    router.push(`/scenes?projectId=${project.id}`)
-  }
-
-  const handleQuickAccess = (projectId: string, route: string) => {
-    setCurrentProject(projects.find(p => p.id === projectId) || null)
-    router.push(`/${route}?projectId=${projectId}`)
-  }
-
+export default function LandingPage() {
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold">Dashboard</h1>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              <PlusCircle className="mr-2 h-4 w-4" /> New Project
+    <div className="min-h-screen bg-gradient-to-br from-[#212121] to-[#3498db] text-white">
+      <div className="container mx-auto px-4 py-8">
+        <header className="flex justify-between items-center mb-16">
+          <h1 className="text-3xl font-bold">Screenplay App</h1>
+          <Button asChild variant="ghost" className="text-white hover:text-[#e74c3c]">
+            <Link href="/sign-in">Log In</Link>
+          </Button>
+        </header>
+
+        <main>
+          <section className="text-center mb-16">
+            <h2 className="text-5xl font-bold mb-4">Unleash Your Screenwriting Potential</h2>
+            <p className="text-xl text-gray-300 mb-8">Craft captivating stories with our powerful screenwriting tool</p>
+            <Button asChild size="lg" className="bg-[#e74c3c] hover:bg-[#c0392b] text-white">
+              <Link href="/sign-up">Get Started</Link>
             </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New Project</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="title" className="text-right">Title</Label>
-                <Input
-                  id="title"
-                  value={newProject.title}
-                  onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">Description</Label>
-                <Input
-                  id="description"
-                  value={newProject.description}
-                  onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-                  className="col-span-3"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button onClick={handleAddProject}>Create Project</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
+          </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
-            <Film className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{projects.length}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Characters</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{characterCount}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Words</CardTitle>
-            <Book className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalWordCount}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg. Progress</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {Math.round(projectProgress.reduce((sum, project) => sum + project.progress, 0) / projectProgress.length)}%
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Project Progress</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={projectProgress}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="progress" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Scenes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[250px]">
-              <ul className="space-y-2">
-                {recentScenes.map((scene) => (
-                  <li key={scene.id} className="flex justify-between items-center">
-                    <span>{scene.title}</span>
-                    <Button variant="ghost" onClick={() => router.push(`/scenes?sceneId=${scene.id}`)}>View</Button>
-                  </li>
-                ))}
-              </ul>
-            </ScrollArea>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Your Projects</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map(project => (
-              <Card key={project.id}>
+          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            {features.map((feature, index) => (
+              <Card key={index} className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg">
                 <CardHeader>
-                  <CardTitle>{project.title}</CardTitle>
-                  <CardDescription>{project.description}</CardDescription>
+                  <feature.icon className="w-10 h-10 mb-2 text-[#e74c3c]" />
+                  <CardTitle className="text-white">{feature.title}</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
-                  <Button className="w-full" onClick={() => handleOpenProject(project)}>
-                    <Film className="mr-2 h-4 w-4" /> Open Project
-                  </Button>
-                  <div className="flex space-x-2">
-                    <Button variant="outline" size="sm" onClick={() => handleQuickAccess(project.id, 'scenes')}>
-                      <PenTool className="mr-2 h-4 w-4" /> Scenes
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleQuickAccess(project.id, 'characters')}>
-                      <Users className="mr-2 h-4 w-4" /> Characters
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleQuickAccess(project.id, 'script')}>
-                      <Book className="mr-2 h-4 w-4" /> Script
-                    </Button>
-                  </div>
+                <CardContent>
+                  <CardDescription className="text-gray-300">{feature.description}</CardDescription>
                 </CardContent>
               </Card>
             ))}
-          </div>
-        </CardContent>
-      </Card>
+          </section>
+
+          <section className="bg-[#212121] rounded-lg shadow-lg p-8 mb-16">
+            <h2 className="text-3xl font-bold mb-4 text-center">What Our Users Say</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {testimonials.map((testimonial, index) => (
+                <blockquote key={index} className="italic text-gray-300">
+                  "{testimonial.quote}"
+                  <footer className="text-[#e74c3c] mt-2">- {testimonial.author}</footer>
+                </blockquote>
+              ))}
+            </div>
+          </section>
+
+          <section className="text-center bg-[#e74c3c] rounded-lg p-8 mb-16">
+            <h2 className="text-3xl font-bold mb-4">Ready to Start Your Screenwriting Journey?</h2>
+            <Button asChild size="lg" className="bg-white text-[#e74c3c] hover:bg-gray-100">
+              <Link href="/sign-up">Get Started Now</Link>
+            </Button>
+          </section>
+        </main>
+
+        <footer className="text-center text-gray-300">
+          &copy; 2024 Screenplay App. All rights reserved.
+        </footer>
+      </div>
     </div>
   )
 }
+
+const features = [
+  {
+    icon: PenTool,
+    title: "Intuitive Writing",
+    description: "Distraction-free environment for focused writing sessions."
+  },
+  {
+    icon: Users,
+    title: "Character Development",
+    description: "Create and manage complex characters with ease."
+  },
+  {
+    icon: Book,
+    title: "Script Formatting",
+    description: "Automatic industry-standard formatting as you write."
+  },
+  {
+    icon: Calendar,
+    title: "Project Management",
+    description: "Keep track of your projects, deadlines, and revisions."
+  }
+]
+
+const testimonials = [
+  {
+    quote: "This app has revolutionized my writing process. I can't imagine working without it now!",
+    author: "Sarah J., Screenwriter"
+  },
+  {
+    quote: "The character development tools are a game-changer. My stories have never been more dynamic.",
+    author: "Michael R., Filmmaker"
+  },
+  {
+    quote: "From outline to final draft, this app supports every stage of my writing journey.",
+    author: "Emma L., TV Writer"
+  }
+]
