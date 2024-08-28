@@ -1,197 +1,78 @@
+// app/workspace/page.tsx
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { TopNavBar } from '@/components/TopNavBar'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Clock, CheckCircle, Search } from 'lucide-react'
+import { Search, PlusCircle } from 'lucide-react'
+import { Overview } from '@/components/workspace/Overview'
+import { ProjectList } from '@/components/workspace/ProjectList'
+import { VisualizationCharts } from '@/components/workspace/VisualizationCharts'
+import { TaskList } from '@/components/workspace/TaskList'
+import { Project, Task, ActivityData, OverviewStat } from '@/lib/types'
+
+// Mock data (replace with real data in production)
+const overviewStats: OverviewStat[] = [
+  { title: "Total Projects", value: "12" },
+  { title: "In Progress", value: "8" },
+  { title: "Completed", value: "4" },
+  { title: "Total Revenue", value: "$45,231" },
+]
+
+const activityData: ActivityData[] = [
+  { date: 'Mon', words: 1500 },
+  { date: 'Tue', words: 2000 },
+  { date: 'Wed', words: 1800 },
+  { date: 'Thu', words: 2200 },
+  { date: 'Fri', words: 1900 },
+  { date: 'Sat', words: 1000 },
+  { date: 'Sun', words: 2500 },
+]
+
+const projects: Project[] = [
+  { id: "1", title: "The Raay Screenplay", description: "A futuristic sci-fi drama", progress: 80, status: "active" },
+  { id: "2", title: "Cosmic Odyssey", description: "An epic space adventure", progress: 30, status: "active" },
+  { id: "3", title: "Neon Nights", description: "A cyberpunk thriller", progress: 100, status: "completed" },
+  { id: "4", title: "Echoes of Eternity", description: "A time-travel romance", progress: 10, status: "active" },
+  { id: "5", title: "Whispers in the Wind", description: "A supernatural mystery", progress: 100, status: "completed" },
+]
+
+const tasks: Task[] = [
+  { id: 1, title: "Outline Act 2", project: "The Raay Screenplay", dueDate: "2024-05-15", status: "in-progress" },
+  { id: 2, title: "Character development for protagonist", project: "Cosmic Odyssey", dueDate: "2024-05-18", status: "pending" },
+  { id: 3, title: "Research space travel mechanics", project: "Cosmic Odyssey", dueDate: "2024-05-20", status: "in-progress" },
+  { id: 4, title: "Write climax scene", project: "The Raay Screenplay", dueDate: "2024-05-25", status: "pending" },
+]
 
 export default function WorkspacePage() {
+  const [searchQuery, setSearchQuery] = useState("")
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <TopNavBar />
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-center mb-8">
-          <div className="w-full max-w-md">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <Input 
-                type="text" 
-                placeholder="Search projects, tasks, characters..." 
-                className="pl-10 pr-4 py-2 w-full"
-              />
-            </div>
+      <main className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <div className="relative w-1/3">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Search projects, tasks, or documents"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
           </div>
+          <Button>
+            <PlusCircle className="mr-2 h-4 w-4" /> New Project
+          </Button>
         </div>
-        <div className="flex">
-          <main className="flex-grow mr-8">
-            <h1 className="text-3xl font-bold mb-2">Overview</h1>
-            <p className="text-gray-600 mb-8">View key stats and insights for all your projects.</p>
 
-            <div className="grid grid-cols-4 gap-6 mb-8">
-              <StatCard title="Total Projects" value="12" />
-              <StatCard title="In Progress" value="8" />
-              <StatCard title="Completed" value="4" />
-              <StatCard title="Total Revenue" value="$45,231" />
-            </div>
-
-            <div className="grid grid-cols-2 gap-6 mb-8">
-              <ProjectProgress />
-              <TaskCompletion />
-            </div>
-
-            <ProjectsTable />
-          </main>
-          <aside className="w-80">
-            <TasksList />
-          </aside>
-        </div>
-      </div>
+        <Overview stats={overviewStats} />
+        <ProjectList projects={projects} />
+        <VisualizationCharts activityData={activityData} projects={projects} />
+        <TaskList tasks={tasks} />
+      </main>
     </div>
-  )
-}
-
-function StatCard({ title, value }: { title: string, value: string }) {
-  return (
-    <Card>
-      <CardContent className="pt-6">
-        <div className="text-3xl font-bold">{value}</div>
-        <p className="text-sm text-gray-600 mt-2">{title}</p>
-      </CardContent>
-    </Card>
-  )
-}
-
-function ProjectProgress() {
-  const projects = [
-    { name: "The Raay Screenplay", progress: 80 },
-    { name: "The Raay Screenplay 2", progress: 30 },
-    { name: "The Raay Screenplay 3", progress: 10 },
-  ]
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Project Progress</CardTitle>
-        <p className="text-sm text-gray-600">Track the progress of your projects.</p>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {projects.map((project, index) => (
-            <div key={index}>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">{project.name}</span>
-                <span className="text-sm font-medium">{project.progress}%</span>
-              </div>
-              <Progress value={project.progress} className="h-2" />
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
-
-function TaskCompletion() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Task Completion</CardTitle>
-        <p className="text-sm text-gray-600">See how many tasks are completed across your projects.</p>
-      </CardHeader>
-      <CardContent>
-        {/* Add task completion chart or stats here */}
-        <p>Task completion stats coming soon...</p>
-      </CardContent>
-    </Card>
-  )
-}
-
-function ProjectsTable() {
-  const projects = [
-    { title: "The Raay Screenplay", status: "In Progress", dueDate: "June 30, 2024", tasksInProgress: 4, tasksPending: 2 },
-    { title: "The Raay Screenplay 2", status: "Pending", dueDate: "August 15, 2024", tasksInProgress: 0, tasksPending: 1 },
-    { title: "The Raay Screenplay 3", status: "In Progress", dueDate: "November 1, 2024", tasksInProgress: 2, tasksPending: 3 },
-  ]
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Projects</CardTitle>
-        <p className="text-sm text-gray-600">View and manage your screenplay projects.</p>
-      </CardHeader>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Due Date</TableHead>
-              <TableHead>Tasks</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {projects.map((project, index) => (
-              <TableRow key={index}>
-                <TableCell>{project.title}</TableCell>
-                <TableCell>
-                  <Badge variant={project.status === "In Progress" ? "default" : "secondary"}>
-                    {project.status === "In Progress" ? (
-                      <Clock className="w-3 h-3 mr-1 inline" />
-                    ) : (
-                      <CheckCircle className="w-3 h-3 mr-1 inline" />
-                    )}
-                    {project.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>{project.dueDate}</TableCell>
-                <TableCell>
-                  <Badge variant="default" className="mr-1">{project.tasksInProgress} In Progress</Badge>
-                  <Badge variant="secondary">{project.tasksPending} Pending</Badge>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
-  )
-}
-
-function TasksList() {
-  const tasks = [
-    { name: "Write Act 1", status: "In Progress" },
-    { name: "Research character backstories", status: "Pending" },
-    { name: "Outline Act 2", status: "In Progress" },
-    { name: "Write dialogue for Act 3", status: "Pending" },
-  ]
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Tasks</CardTitle>
-        <p className="text-sm text-gray-600">Manage your tasks and track your progress.</p>
-      </CardHeader>
-      <CardContent>
-        <ul className="space-y-2">
-          {tasks.map((task, index) => (
-            <li key={index} className="flex items-center justify-between">
-              <span>{task.name}</span>
-              <Badge variant={task.status === "In Progress" ? "default" : "secondary"}>
-                {task.status === "In Progress" ? (
-                  <Clock className="w-3 h-3 mr-1 inline" />
-                ) : (
-                  <CheckCircle className="w-3 h-3 mr-1 inline" />
-                )}
-                {task.status}
-              </Badge>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
   )
 }

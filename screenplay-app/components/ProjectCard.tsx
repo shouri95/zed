@@ -1,25 +1,20 @@
+// components/ProjectCard.tsx
 import React from 'react'
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Clock, CheckCircle } from 'lucide-react'
+import { Project } from '@/lib/types'
 
 interface ProjectCardProps {
-  project: {
-    id: number
-    title: string
-    image: string
-    lastEdited?: string
-    completed?: string
-    status: 'active' | 'completed'
-    progress: number
-  }
+  project: Project
+  onClick: () => void
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, onClick }: ProjectCardProps) {
   return (
-    <Card className="overflow-hidden bg-gray-800 border-gray-700 hover:border-purple-500 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
       <div className="relative h-48">
         <Image 
           src={project.image} 
@@ -46,12 +41,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </div>
       </div>
       <CardContent className="p-4">
+        <p className="text-sm text-gray-600 mb-4">{project.description}</p>
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-gray-400">Progress</span>
-          <span className="text-sm font-medium text-gray-400">{project.progress}%</span>
+          <span className="text-sm font-medium">Progress</span>
+          <span className="text-sm font-medium">{project.progress}%</span>
         </div>
-        <Progress value={project.progress} className="h-2 mb-4" />
-        <Button className="w-full bg-purple-600 hover:bg-purple-700">Open Project</Button>
+        <Progress value={project.progress} className="mb-4" />
+        <Button onClick={onClick} className="w-full">Open Project</Button>
       </CardContent>
     </Card>
   )

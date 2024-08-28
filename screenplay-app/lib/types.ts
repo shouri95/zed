@@ -1,4 +1,4 @@
-import { type } from "os"
+// lib/types.ts
 
 export interface Scene {
   storyPhase: string
@@ -34,6 +34,11 @@ export interface Project {
   id: string
   title: string
   description: string
+  progress: number
+  status: 'active' | 'completed'
+  image: string  // Add this line
+  lastEdited?: string  // Add this line
+  completed?: string  // Add this line
 }
 
 export interface ArcPoint {
@@ -55,4 +60,22 @@ export interface Location {
   id: string
   name: string
   description: string
+}
+
+export interface Task {
+  id: number
+  title: string
+  project: string
+  dueDate: string
+  status: 'in-progress' | 'pending'
+}
+
+export interface ActivityData {
+  date: string
+  words: number
+}
+
+export interface OverviewStat {
+  title: string
+  value: string
 }

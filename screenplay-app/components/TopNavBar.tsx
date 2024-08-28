@@ -1,3 +1,4 @@
+// components/TopNavBar.tsx
 import React from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
@@ -15,12 +16,13 @@ import {
 export function TopNavBar() {
   return (
     <nav className="flex justify-between items-center p-4 bg-white border-b">
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center">
         <Link href="/" className="text-2xl font-bold">Raay</Link>
-        <Link href="/home" className="text-gray-600 hover:text-gray-900">Home</Link>
-        <Link href="/projects" className="text-gray-600 hover:text-gray-900">Projects</Link>
       </div>
       <div className="flex items-center space-x-4">
+        <Link href="/workspace" className="text-gray-600 hover:text-gray-900">Home</Link>
+        <Link href="/projects" className="text-gray-600 hover:text-gray-900">Projects</Link>
+        <Link href="/idea-hub" className="text-gray-600 hover:text-gray-900">Idea Hub</Link>
         <Button variant="ghost" size="icon">
           <Calendar className="h-5 w-5" />
         </Button>

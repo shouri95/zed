@@ -1,8 +1,9 @@
+// app/layout.tsx
 import './globals.css'
 import '../styles/custom.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { Sidebar } from '@/components/sidebar'
+import { TopNavBar } from '@/components/TopNavBar'
 import { Toaster } from "@/components/ui/toaster"
 import { ProjectProvider } from '@/lib/contexts/ProjectContext'
 
@@ -22,7 +23,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ProjectProvider>
-          {children}
+          <div className="flex flex-col min-h-screen">
+            <TopNavBar />
+            <main className="flex-grow">
+              {children}
+            </main>
+          </div>
           <Toaster />
         </ProjectProvider>
       </body>

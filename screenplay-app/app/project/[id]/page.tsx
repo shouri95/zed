@@ -1,6 +1,7 @@
-'use client'
+// app/project/[id]/page.tsx
+'use client';
 
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { useProject } from '@/lib/contexts/ProjectContext'
 import { WithProjectProtection } from '@/components/WithProjectProtection'
