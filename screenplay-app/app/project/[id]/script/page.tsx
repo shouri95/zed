@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react'
 import { WithProjectProtection } from '@/components/WithProjectProtection'
 import { useProject } from '@/lib/contexts/ProjectContext'
 import { useParams } from 'next/navigation'
-import { FullScreenplayView } from '@/components/screenplay/full-screenplay-view'
-import { Scene } from '@/lib/types'
+import { FullScreenplayView } from '@/features/screenplay/full-screenplay-view'
+import { Scene } from '@/lib/types/types'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 function ScriptPage() {

@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react'
-import { SceneCanvas } from '@/components/scenes/scene-canvas'
+import { SceneCanvas } from '@/features/scenes/scene-canvas'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PlusCircle, Film, BookOpen } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
-import { FullScreenplayView } from '@/components/screenplay/full-screenplay-view'
-import { Scene } from '@/lib/types'
+import { FullScreenplayView } from '@/features/screenplay/full-screenplay-view'
+import { Scene } from '@/lib/types/types'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useProject } from '@/lib/contexts/ProjectContext'
 import { useToast } from "@/components/ui/use-toast"

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import io, { Socket } from 'socket.io-client'
-import { Scene } from '@/lib/types'
+import { Scene } from '@/lib/types/types'
 
 export function useRealtimeCollaboration(sceneId: string) {
   const [socket, setSocket] = useState<Socket | null>(null)

@@ -12,9 +12,9 @@ import Link from 'next/link'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Progress } from "@/components/ui/progress"
 import { StoryTimeline } from '@/components/timeline/StoryTimeline'
-import { StoryStructure } from '@/components/story/StoryStructure'
-import { ScriptExport } from '@/components/screenplay/ScriptExport'
-import { Scene } from '@/lib/types'
+import { StoryStructure } from '@/features/story/StoryStructure'
+import { ScriptExport } from '@/features/screenplay/ScriptExport'
+import { Scene } from '@/lib/types/types'
 
 function ProjectHomePage() {
   const { id } = useParams()

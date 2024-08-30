@@ -1,5 +1,5 @@
 import React from 'react'
-import { CharacterManagement } from '@/components/characters/character-management'
+import { CharacterManagement } from '@/features/characters/character-management'
 import { WithProjectProtection } from '@/components/WithProjectProtection'
 import { useProject } from '@/lib/contexts/ProjectContext'
 
