@@ -3,9 +3,14 @@ import './globals.css'
 import '../styles/custom.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { TopNavBar } from '@/components/TopNavBar'
 import { Toaster } from "@/components/ui/toaster"
+import '@/styles/embla.css'
 import { ProjectProvider } from '@/lib/contexts/ProjectContext'
+import ErrorBoundary from '@/components/ErrorBoundary'
+import dynamic from 'next/dynamic'
+import { TopNavBar } from '@/components/layout/TopNavBar'
+
+const DashNav = dynamic(() => import('@/components/DashNav'), { ssr: false })
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,15 +27,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ProjectProvider>
-          <div className="flex flex-col min-h-screen">
-            <TopNavBar />
-            <main className="flex-grow">
-              {children}
-            </main>
-          </div>
-          <Toaster />
-        </ProjectProvider>
+        <ErrorBoundary>
+          <ProjectProvider>
+            <div className="flex min-h-screen">
+              <DashNav />
+              <div className="flex-grow">
+                <TopNavBar />
+                <main className="pt-16 pl-80">
+                  {children}
+                </main>
+              </div>
+            </div>
+            <Toaster />
+          </ProjectProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )
