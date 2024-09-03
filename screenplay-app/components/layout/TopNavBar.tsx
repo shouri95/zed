@@ -3,8 +3,7 @@ import React from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Calendar, Search } from 'lucide-react'
-import { Input } from "@/components/ui/input"
+import { Calendar } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,18 +15,24 @@ import {
 
 export function TopNavBar() {
   return (
-    <nav className="flex justify-between items-center p-4 bg-white border-b fixed top-0 right-0 left-80 z-30">
-      <div className="flex-grow max-w-xl">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <Input
-            type="text"
-            placeholder="Search projects, tasks, or documents"
-            className="pl-10 pr-4 py-2 w-full"
-          />
-        </div>
-      </div>
-      <div className="flex items-center space-x-4">
+    <nav className="flex justify-between items-center p-4 bg-white border-b fixed top-0 right-0 left-0 z-30">
+      {/* App Name */}
+      <Link href="/workspace" passHref>
+        <Button variant="link" className="text-2xl font-bold text-gray-900 hover:text-gray-700">
+          Raay
+        </Button>
+      </Link>
+
+      {/* Right-side Navigation */}
+      <div className="flex items-center space-x-6">
+        <Link href="/workspace" passHref>
+          <Button variant="ghost">Home</Button>
+        </Link>
+        <Link href="/projects" passHref>
+          <Button variant="ghost">Projects</Button>
+        </Link>
+
+        {/* Other Options */}
         <Button variant="ghost" size="icon">
           <Calendar className="h-5 w-5" />
         </Button>

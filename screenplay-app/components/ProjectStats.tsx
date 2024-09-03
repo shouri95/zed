@@ -1,7 +1,10 @@
+// components/ProjectStats.tsx
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { Button } from "@/components/ui/button"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import Link from 'next/link'
 
 const data = [
   { name: 'Mon', words: 1500 },
@@ -13,7 +16,11 @@ const data = [
   { name: 'Sun', words: 2500 },
 ]
 
-export function ProjectStats() {
+interface ProjectStatsProps {
+  projectId: string
+}
+
+export function ProjectStats({ projectId }: ProjectStatsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Card>
@@ -48,6 +55,16 @@ export function ProjectStats() {
               <Bar dataKey="words" fill="#3498db" />
             </BarChart>
           </ResponsiveContainer>
+        </CardContent>
+      </Card>
+      <Card className="md:col-span-2">
+        <CardHeader>
+          <CardTitle>Project Actions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Link href={`/project/${projectId}`} passHref>
+            <Button className="w-full">View Project Workspace</Button>
+          </Link>
         </CardContent>
       </Card>
     </div>

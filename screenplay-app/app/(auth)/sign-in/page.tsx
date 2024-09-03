@@ -1,27 +1,24 @@
+// app/(auth)/sign-in/page.tsx
 import React from 'react';
-import Image from 'next/image';
 import AuthForm from '@/components/Authform';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 const SignInPage = () => {
   return (
-    <div className="flex min-h-screen">
-      <div className="flex-1 flex flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-sm lg:w-96">
-          <div className="flex items-center mb-8">
-            <Image src="/icons/logo.svg" alt="Raay Logo" width={40} height={40} />
-            <h2 className="ml-3 text-3xl font-bold text-gray-900">Raay</h2>
-          </div>
-          <AuthForm type="sign-in" />
-        </div>
-      </div>
-      <div className="hidden lg:block relative w-0 flex-1">
-        <Image
-          className="absolute inset-0 h-full w-full object-cover"
-          src="/images/auth-background.jpg"
-          alt="Authentication background"
-          layout="fill"
-        />
-      </div>
+    <div className="min-h-screen flex flex-col justify-center items-center bg-white text-gray-900">
+      <Link href="/" className="absolute top-8 left-8 flex items-center text-gray-600 hover:text-gray-900">
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to Home
+      </Link>
+      <main className="w-full max-w-md px-4">
+        <h1 className="text-4xl font-bold mb-2 text-center">Welcome Back</h1>
+        <p className="text-center text-gray-600 mb-8">Sign in to continue your journey</p>
+        <AuthForm type="sign-in" />
+      </main>
+      <footer className="absolute bottom-4 text-center text-gray-600">
+        <p>&copy; 2024 Raay. All rights reserved.</p>
+      </footer>
     </div>
   );
 };

@@ -7,10 +7,7 @@ import { Toaster } from "@/components/ui/toaster"
 import '@/styles/embla.css'
 import { ProjectProvider } from '@/lib/contexts/ProjectContext'
 import ErrorBoundary from '@/components/ErrorBoundary'
-import dynamic from 'next/dynamic'
-import { TopNavBar } from '@/components/layout/TopNavBar'
-
-const DashNav = dynamic(() => import('@/components/DashNav'), { ssr: false })
+import ClientLayout from '@/components/layout/ClientLayout'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -29,15 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ErrorBoundary>
           <ProjectProvider>
-            <div className="flex min-h-screen">
-              <DashNav />
-              <div className="flex-grow">
-                <TopNavBar />
-                <main className="pt-16 pl-80">
-                  {children}
-                </main>
-              </div>
-            </div>
+            <ClientLayout>{children}</ClientLayout>
             <Toaster />
           </ProjectProvider>
         </ErrorBoundary>

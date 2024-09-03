@@ -9,15 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import EmblaCarousel from '@/components/carousel/EmblaCarousel'
 import { useProjects } from '@/lib/hooks/useProjects'
 import { Project } from '@/lib/types/types'
+import { ProjectStats } from '@/components/ProjectStats'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 export default function ProjectsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState('lastUpdated')
   const { projects, loading, error } = useProjects()
   const [groupedProjects, setGroupedProjects] = useState<{[key: string]: Project[]}>({})
-  const router = useRouter()
 
   useEffect(() => {
     if (projects.length > 0) {
@@ -35,10 +34,6 @@ export default function ProjectsPage() {
   if (loading) return <div className="flex justify-center items-center h-screen">Loading projects...</div>
   if (error) return <div className="flex justify-center items-center h-screen">Error: {error.message}</div>
 
-  const handleViewProject = (projectId: string) => {
-    router.push(`/project/${projectId}`)
-  }
-
   const renderProjectSlide = (project: Project) => (
     <div className="embla__slide p-4">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden h-full flex flex-col">
@@ -54,13 +49,9 @@ export default function ProjectsPage() {
           </div>
         </div>
         <div className="p-4 bg-gray-50">
-          <Button 
-            className="w-full" 
-            variant="outline"
-            onClick={() => handleViewProject(project.id)}
-          >
-            View Project
-          </Button>
+          <Link href={`/project/${project.id}`} passHref>
+            <Button className="w-full" variant="outline">View Project</Button>
+          </Link>
         </div>
       </div>
     </div>

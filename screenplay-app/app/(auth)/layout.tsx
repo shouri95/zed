@@ -1,3 +1,4 @@
+// app/(auth)/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
@@ -15,8 +16,8 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className={inter.className}>
-      <main>{children}</main>
+    <div className={`${inter.className} min-h-screen flex flex-col justify-center items-center bg-white`}>
+      <main className="w-full max-w-md px-4">{children}</main>
       <Toaster />
     </div>
   );

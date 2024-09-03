@@ -3,6 +3,9 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react'
 
 export interface Project {
+  progress: ReactNode
+  status: ReactNode
+  genre: ReactNode
   id: string
   title: string
   description: string
