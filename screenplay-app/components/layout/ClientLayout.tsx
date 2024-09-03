@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { TopNavBar } from '@/components/layout/TopNavBar'
 
-const DashNav = dynamic(() => import('@/components/DashNav'), { ssr: false })
+const DashNav = dynamic(() => import('@/components/layout/DashNav'), { ssr: false })
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()

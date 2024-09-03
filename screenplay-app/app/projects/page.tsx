@@ -6,41 +6,38 @@ import { Button } from "@/components/ui/button"
 import { PlusCircle, Search } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import EmblaCarousel from '@/components/carousel/EmblaCarousel'
+import EmblaCarousel from '@/components/ui/carousel/EmblaCarousel'
 import { useProjects } from '@/lib/hooks/useProjects'
 import { Project } from '@/lib/types/types'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function ProjectsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState('lastUpdated')
   const { projects, loading, error } = useProjects()
-  const [groupedProjects, setGroupedProjects] = useState<{[key: string]: Project[]}>({})
+  const [groupedProjects, setGroupedProjects] = useState<{ [key: string]: Project[] }>({})
   const router = useRouter()
 
   useEffect(() => {
     if (projects.length > 0) {
       const grouped = projects.reduce((acc, project) => {
         if (!acc[project.genre]) {
-          acc[project.genre] = []
+          acc[project.genre] = [];
         }
-        acc[project.genre].push(project)
-        return acc
-      }, {} as {[key: string]: Project[]})
-      setGroupedProjects(grouped)
+        acc[project.genre].push(project);
+        return acc;
+      }, {} as { [key: string]: Project[] });
+      setGroupedProjects(grouped);
     }
-  }, [projects])
-
-  if (loading) return <div className="flex justify-center items-center h-screen">Loading projects...</div>
-  if (error) return <div className="flex justify-center items-center h-screen">Error: {error.message}</div>
+  }, [projects]);
 
   const handleViewProject = (projectId: string) => {
-    router.push(`/project/${projectId}`)
-  }
+    router.push(`/project-workspace/${projectId}`);
+  };
 
   const renderProjectSlide = (project: Project) => (
-    <div className="embla__slide p-4">
+    <div className="embla__slide p-4" key={project.id}>
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden h-full flex flex-col">
         <div className="p-4 flex-grow">
           <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
@@ -64,7 +61,10 @@ export default function ProjectsPage() {
         </div>
       </div>
     </div>
-  )
+  );
+
+  if (loading) return <div className="flex justify-center items-center h-screen">Loading projects...</div>;
+  if (error) return <div className="flex justify-center items-center h-screen">Error: {error.message}</div>;
 
   return (
     <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 py-8">
@@ -108,5 +108,5 @@ export default function ProjectsPage() {
         </div>
       ))}
     </div>
-  )
+  );
 }

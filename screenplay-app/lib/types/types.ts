@@ -35,7 +35,7 @@ export interface Project {
   title: string
   description: string
   progress: number
-  status: 'active' | 'completed'
+  status: 'active' | 'completed' | 'in-progress'
   image: string  // Add this line
   lastEdited?: string  // Add this line
   completed?: string  // Add this line

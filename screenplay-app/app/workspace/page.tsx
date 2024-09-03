@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, PlusCircle } from 'lucide-react'
 import Overview from '@/features/workspace/Overview'
-import EmblaCarousel from '@/components/carousel/EmblaCarousel'
+import EmblaCarousel from '@/components/ui/carousel/EmblaCarousel'
 import { VisualizationCharts } from '@/features/workspace/VisualizationCharts'
 import { TaskList } from '@/features/workspace/TaskList'
 import { Project, Task, ActivityData, OverviewStat } from '@/lib/types/types'

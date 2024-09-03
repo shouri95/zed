@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { PlusCircle, Search } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import EmblaCarousel from '@/components/carousel/EmblaCarousel'
+import EmblaCarousel from '@/components/ui/carousel/EmblaCarousel'
 import { useProjects } from '@/lib/hooks/useProjects'
 import { Project } from '@/lib/types/types'
 import { ProjectStats } from '@/components/ProjectStats'
