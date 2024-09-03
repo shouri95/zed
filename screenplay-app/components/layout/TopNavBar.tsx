@@ -15,7 +15,7 @@ import {
 
 export function TopNavBar() {
   return (
-    <nav className="flex justify-between items-center p-4 bg-white border-b fixed top-0 right-0 left-0 z-30">
+    <nav className="flex justify-between items-center p-4 bg-white border-b fixed top-0 left-0 right-0 h-16 z-50">
       {/* App Name */}
       <Link href="/workspace" passHref>
         <Button variant="link" className="text-2xl font-bold text-gray-900 hover:text-gray-700">

@@ -12,14 +12,7 @@ import {
   Settings,
   PenTool,
   Calendar,
-  X,
 } from 'lucide-react';
-import { cn } from '@/lib/utils/utils';
-
-interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
 
 interface NavItemProps {
   href: string;
@@ -28,25 +21,13 @@ interface NavItemProps {
   currentPath: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const projectId = pathname.split('/')[2];
 
-  const sidebarClasses = cn(
-    'fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out',
-    isOpen ? 'translate-x-0' : '-translate-x-full',
-    'lg:translate-x-0 lg:static lg:flex lg:flex-col'
-  );
-
   return (
-    <div className={sidebarClasses}>
-      <div className="flex items-center justify-between p-4 border-b">
-        <h2 className="text-xl font-bold">Project Menu</h2>
-        <Button variant="ghost" size="icon" onClick={onClose} className="lg:hidden">
-          <X className="h-6 w-6" />
-        </Button>
-      </div>
-      <ScrollArea className="flex-grow">
+    <div className="w-64 bg-white shadow-lg h-full fixed left-0 top-16"> {/* Adjust top position */}
+      <ScrollArea className="h-[calc(100vh-4rem)]"> {/* Adjust height calculation */}
         <nav className="space-y-2 p-4">
           <NavItem href={`/project-workspace/${projectId}`} icon={<Home />} text="Dashboard" currentPath={pathname} />
           <NavItem href={`/project-workspace/${projectId}/script`} icon={<Book />} text="Script" currentPath={pathname} />

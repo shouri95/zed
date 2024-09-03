@@ -3,10 +3,8 @@
 
 import React from 'react'
 import { usePathname } from 'next/navigation'
-import dynamic from 'next/dynamic'
 import { TopNavBar } from '@/components/layout/TopNavBar'
-
-const DashNav = dynamic(() => import('@/components/layout/DashNav'), { ssr: false })
+import Sidebar from '@/components/layout/Sidebar'
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -16,11 +14,15 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const shouldHideSidebar = hideSidebarPaths.some(path => pathname.startsWith(path))
 
   return (
-    <div className="flex min-h-screen">
-      {!shouldHideSidebar && <DashNav />}
-      <div className="flex-grow">
-        <TopNavBar />
-        <main className={shouldHideSidebar ? '' : "pt-16 pl-80"}>
+    <div className="flex flex-col min-h-screen">
+      <TopNavBar />
+      <div className="flex flex-1 pt-16"> {/* Add top padding to account for TopNavBar height */}
+        {!shouldHideSidebar && (
+          <div className="w-64 flex-shrink-0">
+            <Sidebar />
+          </div>
+        )}
+        <main className="flex-1 overflow-auto p-6">
           {children}
         </main>
       </div>

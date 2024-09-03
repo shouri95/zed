@@ -18,7 +18,7 @@ function ProjectWorkspace() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      {isSidebarOpen && <Sidebar />}
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white border-b p-4 flex justify-between items-center">
           <Button
