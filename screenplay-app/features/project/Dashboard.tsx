@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import EmblaCarousel from '@/components/ui/carousel/EmblaCarousel'
 import { useProjects } from '@/lib/hooks/useProjects'
 import { Project } from '@/lib/types/types'
-import { ProjectStats } from '@/components/ProjectStats'
+import { ProjectStats } from '@/features/project/ProjectStats'
 import Link from 'next/link'
 
 export default function ProjectsPage() {

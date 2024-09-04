@@ -1,4 +1,3 @@
-// components/layout/ClientLayout.tsx
 'use client'
 
 import React from 'react'
@@ -11,7 +10,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   
   // Determine if the current page should hide the sidebar
   const hideSidebarPaths = ['/', '/sign-in', '/sign-up', '/workspace', '/projects']
-  const shouldHideSidebar = hideSidebarPaths.some(path => pathname.startsWith(path))
+  const isInsideProjectWorkspace = pathname.startsWith('/project-workspace/')
+
+  // Sidebar should only be hidden on specific paths and not within the [id] project workspace pages
+  const shouldHideSidebar = hideSidebarPaths.some(path => pathname.startsWith(path)) && !isInsideProjectWorkspace
 
   return (
     <div className="flex flex-col min-h-screen">

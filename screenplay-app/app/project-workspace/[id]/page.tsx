@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { useProject } from '@/lib/contexts/ProjectContext';
-import { WithProjectProtection } from '@/components/WithProjectProtection';
+import { WithProjectProtection } from '@/features/project/WithProjectProtection';
 import Sidebar from '@/components/layout/Sidebar';
 import { Button } from "@/components/ui/button";
 import { Menu } from 'lucide-react';

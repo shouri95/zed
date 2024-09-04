@@ -6,7 +6,7 @@ import { Inter } from 'next/font/google'
 import { Toaster } from "@/components/ui/toaster"
 import '@/styles/embla.css'
 import { ProjectProvider } from '@/lib/contexts/ProjectContext'
-import ErrorBoundary from '@/components/ErrorBoundary'
+import ErrorBoundary from '@/components/shared/ErrorBoundary'
 import ClientLayout from '@/components/layout/ClientLayout'
 
 const inter = Inter({ subsets: ['latin'] })

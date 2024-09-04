@@ -1,6 +1,6 @@
 // app/(auth)/sign-up/page.tsx
 import React from 'react';
-import AuthForm from '@/components/Authform';
+import AuthForm from '@/features/auth/Authform';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 

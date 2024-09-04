@@ -12,7 +12,7 @@ import { Scene } from '@/lib/types/types'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useProject } from '@/lib/contexts/ProjectContext'
 import { useToast } from "@/components/ui/use-toast"
-import { WithProjectProtection } from '@/components/WithProjectProtection'
+import { WithProjectProtection } from '@/features/project/WithProjectProtection'
 
 function ScenesPage() {
   const { id } = useParams()

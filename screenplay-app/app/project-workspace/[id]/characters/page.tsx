@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { CharacterManagement } from '@/features/characters/character-management'
-import { WithProjectProtection } from '@/components/WithProjectProtection'
+import { WithProjectProtection } from '@/features/project/WithProjectProtection'
 import { useProject } from '@/lib/contexts/ProjectContext'
 import { useParams } from 'next/navigation'
 
